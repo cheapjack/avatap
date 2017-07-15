@@ -1,7 +1,7 @@
 import loader
 loader.loadDisplay()
 
-from machine import SPI, Pin
+from machine import SPI, Pin, freq
 from st7920 import Screen
 from faces.font_5x7 import font as smallFont
 bigFont = smallFont
@@ -17,6 +17,10 @@ screen.redraw()
 
 loader.loadOther()
 loader.loadStory(loader.storyUid)
+
+# TODO CH make conditional on being an interior box
+# overclock for speed - sacrificing current (and stability?)
+freq(160000000)
 
 from mfrc522 import MFRC522
 #from faces.font_timB14 import font as bigFont
@@ -38,29 +42,33 @@ class CockleRfid(BankVault):
     def writeCard(self, card, unselect=True):
         return self.writeJson( cardToDict(card), card.uid, unselect)
 
-def prepareHost(story, boxUid):
+def prepareHost(story, boxUids):
     # prepare reader
     readerSpi = SPI(1, baudrate=1800000, polarity=0, phase=0)
     readerSpi.init()
     reader = MFRC522(spi=readerSpi, gpioRst=None, gpioCs=2)
     # wrap hardware in platform-specific API and attach story
     rfid = CockleRfid(reader)
-    box = story._get_table(Box)[boxUid]
-    engine = Engine(box=box)
-    engine.registerStory(story)
     powerPin = Pin(15, Pin.OUT)
     powerPin.value(0)
 
-    # launch box host
-    return Host(
-        story=story,
-        box=box,
-        engine=engine,
-        screen=screen,
-        rfid=rfid,
-        smallFont=smallFont,
-        bigFont=bigFont,
-        blackPlotter=blackPlotter,
-        whitePlotter=whitePlotter,
-        powerPin=powerPin
-    )
+    hosts = {}
+
+    for boxUid in boxUids:
+        box = story._get_table(Box)[boxUid]
+        engine = Engine(box=box)
+        engine.registerStory(story)
+        hosts[boxUid] = Host(
+            story=story,
+            box=box,
+            engine=engine,
+            screen=screen,
+            rfid=rfid,
+            smallFont=smallFont,
+            bigFont=bigFont,
+            blackPlotter=blackPlotter,
+            whitePlotter=whitePlotter,
+            powerPin=powerPin
+        )
+
+    return hosts
