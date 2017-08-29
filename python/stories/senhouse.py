@@ -1,5 +1,4 @@
 import agnostic
-from engines.console import ConsoleSiteEmulator
 from milecastles import Story, Box, ThroughPage, ThroughSequence, ConditionFork, NodeFork, SackChange
 from stories import introText
 
@@ -9,6 +8,7 @@ storyName = __name__.split(".")[-1]
 # create story
 story = Story(
     uid=storyName,
+    version="0.1.0",
     #startNodeUid = "landing",
     startNodeUid="firstLanding",
     startSack={
@@ -24,9 +24,9 @@ agnostic.collect()
 
 with story:
 
-    paddockBox =    Box( uid="1",   label="Box I",      description="Looking out to sea")
+    paddockBox =    Box( uid="1",   label="Box I",      description="in the paddock breeding horses")
     altarBox =   Box( uid="2",   label="Box II",     description="Before the altars of the gods")
-    seaBox = Box( uid="3",   label="Box III",     description="in the paddock breeding horses")
+    seaBox = Box( uid="3",   label="Box III",     description="Looking out to sea")
     agnostic.collect()
 
     entranceBox = paddockBox
@@ -439,14 +439,3 @@ with story:
         nextNodeUid = "landing",
     )
     agnostic.collect()
-
-agnostic.collect()
-
-def run():
-    print("Loading emulator")
-    emulator = ConsoleSiteEmulator(story=story)
-    print("Running Emulator")
-    emulator.run()
-
-if __name__ == "__main__":
-    run()

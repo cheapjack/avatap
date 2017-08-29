@@ -1,6 +1,4 @@
 import sys
-import gc
-gc.threshold((gc.mem_free() + gc.mem_alloc()) // 4)
 import uos
 
 """ # TODO CH Filesystem disabled to maximise memory
@@ -15,28 +13,44 @@ except OSError:
     import inisetup
     vfs = inisetup.setup()
 """
-gc.collect()
 
 import agnostic
-from host.cockle import prepareHost
+agnostic.collect()
+import host.cockle
 import loader
+from machine import reset
 agnostic.collect()
 
 story = loader.loadStory(loader.storyUid)
 agnostic.collect()
 
-boxHosts = prepareHost(story, [loader.boxUid])
-
-boxHost = boxHosts[loader.boxUid]
-while True: # useful for testing powerDown, although loop runs only once if Polulu latching
-    while boxHost.running:
+def run(loop=True):
+    boxHosts = host.cockle.prepareHosts(story, [loader.boxUid])
+    boxHost = boxHosts[loader.boxUid]
+    while loop and boxHost.running:
         agnostic.report_collect()
-        try:
-            cardUid = boxHost.newLoop() # card value allows gameLoop to indicate idleness for future self-depower
-        except Exception as e:
-            sys.print_exception(e)
-    print("Powering down")
-    boxHost.powerDown()
+        cardUid = boxHost.gameLoop()  # card value allows gameLoop to indicate idleness for future self-depower
+
+while True:
+    try:
+        run()
+    except MemoryError:
+        reset()
+    except Exception as e:
+        sys.print_exception(e)
+        continue
+
+"""
+while True:
+    from fuzz import walk
+    try:
+        walk(story)
+    except MemoryError:
+        reset()
+    except Exception as e:
+        sys.print_exception(e)
+        continue
+"""
 
 """
 from regimes.integration_test import run
