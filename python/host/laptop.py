@@ -19,6 +19,7 @@ from host import Host
 
 story = loader.loadStory(loader.storyUid)
 
+#delayActive = True
 delayActive = False
 
 def hostDelay(delay):

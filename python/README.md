@@ -45,3 +45,26 @@ Then use `a`, `b`, `c` or `d` with `1`, `2`, `3`, `4` to simulate interacting wi
 
 HAPPY TAPPING!
 
+## Editing
+
+### introText
+
+The introText variable is in `stories/__init__/py`. Any other useful often used text and data can go here, then invoked in `stories` files with `from stories import usefulVariable`
+
+
+Build Images
+
+I would point you to the command which generates all the images for a given museum. You can see the routine at
+
+https://github.com/cefn/avatap/blob/master/cross/frozen/export.sh
+
+It relies on at least...
+
+* The machine being configured to be able to build Micropython from source ( https://github.com/micropython/micropython/wiki/Getting-Started ) and having the source placed in a 'micropython' folder alongside the 'avatap' folder
+ * The source should not be the original micropython source. I made 6 Avatap-specific changes to the micropython source, as indicated at https://github.com/ShrimpingIt/micropython/tree/memorymax to maximise memory, so getting this specific memorymax version is important to being able to load Avatap-size stories to the ESP8266. If we upgrade to ESP32 boards this may not be an issue.
+
+Get the memorymax branch with `git clone -b memorymax https://github.com/ShrimpingIt/micropython.git`
+
+ * the source should also follow ESP8266-specific instructions at https://learn.adafruit.com/building-and-running-micropython-on-the-esp8266/overview Following these you should be able to make a Micropython firmware image for the NodeMCU board, not just a regular micropython program to run on your desktop as per the more general instructions at https://github.com/micropython/micropython/wiki/Getting-Started
+ * The Avatap file `python/loader.py` specifying the correct 'storyUid' to load the correct story file templates from `python/stories/{id}.py` ( see https://github.com/cefn/avatap/blob/master/python/loader.py )
+
