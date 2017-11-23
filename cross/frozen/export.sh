@@ -20,7 +20,11 @@ ESPTOOLCMD="$ECHO esptool.py"
 cd $GITDIR
 
 # descend into avatap/python to cache templates, generate QString declarations then return
+# If doing this in the VM and populating the avatap folder from the 
+# new git branch for our game
+# we'll have to remove avatap/python/templates/.gitignore so that after emulation and testing locally not in the building VM  we've actually got the templates
 cd avatap/python
+# might have to enclose {} with single quotes accorging to the man page like this '{}'
 find templates -type f -name 't_*.py' -exec $RMPATHCMD {} \;
 python3 -m templates > ../../micropython/esp8266/qstrdefsport.h
 cd ../../
@@ -78,11 +82,13 @@ $COPYPATHCMD avatap/python/regimes/integration_test.py $MODULEDIR/regimes/
 # TRIGGER FREEZING OF MODULES INTO FIRMWARE IMAGE AND UPLOAD IT
 cd micropython/esp8266/
 set -e
-export PATH=/home/cefn/Documents/shrimping/git/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
+export PATH=/home/vagrant/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
+#export PATH=/home/cefn/Documents/shrimping/git/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 #$MAKECMD clean
 #$MAKECMD axtls
 $MAKECMD build/firmware-combined.bin
 #$MAKECMD PORT=/dev/ttyUSB0 FLASH_MODE=dio FLASH_SIZE=32m deploy
 #CH below invocation is faster
-$ESPTOOLCMD --port /dev/ttyUSB0 --baud 1500000 write_flash --flash_mode dio --flash_size=32m 0 build/firmware-combined.bin
+# Commented the below out, so that combined .bin image can be deployed locally.
+# $ESPTOOLCMD --port /dev/ttyUSB0 --baud 1500000 write_flash --flash_mode dio --flash_size=32m 0 build/firmware-combined.bin
 
