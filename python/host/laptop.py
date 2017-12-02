@@ -34,7 +34,7 @@ def randomCardUid():
     return urandom(6)
 
 defaultNumCards = 4
-defaultDelay = 1.0
+defaultDelay = 2.0
 
 pollDelay = 0.01
 
