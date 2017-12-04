@@ -2,13 +2,13 @@
 # garbage collecting between and reporting remaining memory
 from agnostic import report_import, report_collect
 
-#storyUid = "arbeia"
-#storyUid = "senhouse"
-#storyUid = "senhouseDoes"
-#storyUid = "senhouseLeeds"
-storyUid = "TullieHouse"
+#storyUid = 'senhouseLeeds'
+#storyUid = 'senhouseLeeds'
+#storyUid = 'senhouseLeeds'
+storyUid = 'senhouseLeeds'
+#storyUid = 'senhouseLeeds'
 
-boxUid = "1"
+boxUid = '1'
 
 def loadDisplay():
     report_collect()

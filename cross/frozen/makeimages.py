@@ -16,12 +16,12 @@ buildPath = os.path.join(gitFolder, "micropython/esp8266/build/firmware-combined
 imageName = "hyperloop"
 
 boxCounts = dict(
-	arbeia=3,
-	corbridge=4,
+	#arbeia=3,
+	#corbridge=4,
 	#housesteads=4,
-	segedunum=4,
-	senhouse=3,
-	TullieHouse=4,
+	#segedunum=4,
+	senhouseLeeds=3,
+	#TullieHouse=4,
 )
 
 def call(command):
@@ -37,7 +37,8 @@ for museumName,boxCount in boxCounts.items():
 		boxPath = os.path.join(gitFolder,"avatap/firmware", museumName, "{}{}.bin".format(imageName, boxName))
 		replaceall("boxUid.*=.*$", "boxUid = '{}'".format(boxName), loaderPath)
 		#os.remove(buildPath)
-		call(["rm", buildPath])
+		# commented out this for first run
+		#call(["rm", buildPath])
 		call(["./export.sh"])
 		#os.copyfile(buildPath, boxPath)
 		call(["cp", buildPath, boxPath])
