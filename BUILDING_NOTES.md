@@ -23,13 +23,12 @@ I've made the VM then I've just removed the micropython their vagrantfile provid
 
 I've assumed you need the avatap repo nearby, which we'll want to build into the firmware in my case a new branch arcadeofbabel in the cheapjack/avatap repo with a new test game
 
-## Questions
 
-Just wondered how and when I run your export.sh command; assumed it needs to happen prior to the Compiling Firmware bit but after compiling the ESP Open SDK
+Assumed export.sh command needs to happen prior to the Compiling Firmware bit but after compiling the ESP Open SDK
 
 I've done everything up to compiling the ESP Open SDK am I right that your export shell script replaces this step?
 
-Alongside avatap repo next to the `memorymax` ShrimpingIt flavour `micropython`, Ill also be needing the 
+Alongside avatap repo next to the `memorymax` ShrimpingIt flavour `micropython`, Ive placed these in home folder next to avatap 
 
 ```
 # SCREEN LIBRARY
