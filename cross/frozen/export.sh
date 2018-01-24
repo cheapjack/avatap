@@ -43,7 +43,7 @@ $COPYPATHCMD micropython-mfrc522/examples/write.py $MODULEDIR
 # FONT LIBRARY
 $COPYPATHCMD bitfont/python/bitfont.py $MODULEDIR
 # FONT FACES
-$RMPATHCMD -R $MODULEDIR/faces || true
+#$RMPATHCMD -R $MODULEDIR/faces || true
 $CREATEPATHCMD $MODULEDIR/faces
 $COPYPATHCMD bitfont/python/faces/__init__.py $MODULEDIR/faces/
 $COPYPATHCMD bitfont/python/faces/font_5x7.py $MODULEDIR/faces/
@@ -68,7 +68,7 @@ find avatap/python/regimes -maxdepth 1 -type f -name '*.py' -exec $COPYPATHCMD -
 find avatap/python -maxdepth 1 -type f -name '*.py' -exec $COPYPATHCMD {} $MODULEDIR \;
 
 # AVATAP HOST LIB (COCKLE-SPECIFIC AVATAP PLATFORM)
-$RMPATHCMD -R $MODULEDIR/host || true
+#$RMPATHCMD -R $MODULEDIR/host || true
 $CREATEPATHCMD $MODULEDIR/host
 $COPYPATHCMD avatap/python/host/__init__.py $MODULEDIR/host/
 $COPYPATHCMD avatap/python/host/cockle.py $MODULEDIR/host/

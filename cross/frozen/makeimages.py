@@ -40,5 +40,5 @@ for museumName,boxCount in boxCounts.items():
 		# commented out this for first run as there is nothing there
 		#call(["rm", buildPath])
 		call(["./export.sh"])
-		#os.copyfile(buildPath, boxPath)
+		os.copyfile(buildPath, boxPath)
 		call(["cp", buildPath, boxPath])
