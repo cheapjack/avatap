@@ -25,7 +25,8 @@ boxCounts = dict(
 )
 
 def call(command):
-	sys.stdout.write(check_output(command).decode("ascii"))
+	print(check_output(command))
+	#sys.stdout.write(check_output(command).decode("ascii"))
 
 def replaceall(pattern, replacement, filepath):
 	call(["perl", "-pi", "-E", "s/{}/{}/g".format(pattern, replacement),  filepath])
@@ -38,7 +39,7 @@ for museumName,boxCount in boxCounts.items():
 		replaceall("boxUid.*=.*$", "boxUid = '{}'".format(boxName), loaderPath)
 		#os.remove(buildPath)
 		# commented out this for first run as there is nothing there
-		#call(["rm", buildPath])
+		call(["rm", buildPath])
 		call(["./export.sh"])
-		os.copyfile(buildPath, boxPath)
+		#os.copyfile(buildPath, boxPath)
 		call(["cp", buildPath, boxPath])
