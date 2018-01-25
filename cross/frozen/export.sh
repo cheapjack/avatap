@@ -69,12 +69,14 @@ find avatap/python -maxdepth 1 -type f -name '*.py' -exec $COPYPATHCMD {} $MODUL
 
 # AVATAP HOST LIB (COCKLE-SPECIFIC AVATAP PLATFORM)
 #$RMPATHCMD -R $MODULEDIR/host || true
+$RMPATHCMD -rf $MODULEDIR/host
 $CREATEPATHCMD $MODULEDIR/host
 $COPYPATHCMD avatap/python/host/__init__.py $MODULEDIR/host/
 $COPYPATHCMD avatap/python/host/cockle.py $MODULEDIR/host/
 
 # AVATAP REGIMES (e.g. INTEGRATION TEST)
-$RMPATHCMD -R $MODULEDIR/regimes || true
+#$RMPATHCMD -R $MODULEDIR/regimes || true
+$RMPATHCMD -rf $MODULEDIR/regimes
 $CREATEPATHCMD $MODULEDIR/regimes
 $COPYPATHCMD avatap/python/regimes/integration_test.py $MODULEDIR/regimes/
 
@@ -82,10 +84,11 @@ $COPYPATHCMD avatap/python/regimes/integration_test.py $MODULEDIR/regimes/
 # TRIGGER FREEZING OF MODULES INTO FIRMWARE IMAGE AND UPLOAD IT
 cd micropython/esp8266/
 set -e
+#new VM path
 export PATH=/home/vagrant/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 #export PATH=/home/cefn/Documents/shrimping/git/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
-#$MAKECMD clean
-#$MAKECMD axtls
+$MAKECMD clean
+$MAKECMD axtls
 $MAKECMD build/firmware-combined.bin
 #$MAKECMD PORT=/dev/ttyUSB0 FLASH_MODE=dio FLASH_SIZE=32m deploy
 #CH below invocation is faster
