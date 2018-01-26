@@ -87,8 +87,8 @@ set -e
 #new VM path
 export PATH=/home/vagrant/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 #export PATH=/home/cefn/Documents/shrimping/git/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
-$MAKECMD clean
-$MAKECMD axtls
+#$MAKECMD clean
+#$MAKECMD axtls
 $MAKECMD build/firmware-combined.bin
 #$MAKECMD PORT=/dev/ttyUSB0 FLASH_MODE=dio FLASH_SIZE=32m deploy
 #CH below invocation is faster

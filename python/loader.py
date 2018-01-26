@@ -5,7 +5,7 @@ from agnostic import report_import, report_collect
 storyUid = 'senhouseLeeds'
 #storyUid = 'senhouseLeeds'
 
-boxUid = '3'
+boxUid = '1'
 
 def loadDisplay():
     report_collect()
