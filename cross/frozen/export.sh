@@ -39,7 +39,8 @@ $COPYPATHCMD micropython-mfrc522/examples/write.py $MODULEDIR
 # FONT LIBRARY
 $COPYPATHCMD bitfont/python/bitfont.py $MODULEDIR
 # FONT FACES
-$RMPATHCMD -R $MODULEDIR/faces || true
+$RMPATHCMD -rf $MODULEDIR
+#$RMPATHCMD -R $MODULEDIR/faces || true
 $CREATEPATHCMD $MODULEDIR/faces
 $COPYPATHCMD bitfont/python/faces/__init__.py $MODULEDIR/faces/
 $COPYPATHCMD bitfont/python/faces/font_5x7.py $MODULEDIR/faces/
@@ -64,13 +65,15 @@ find avatap/python/regimes -maxdepth 1 -type f -name '*.py' -exec $COPYPATHCMD -
 find avatap/python -maxdepth 1 -type f -name '*.py' -exec $COPYPATHCMD {} $MODULEDIR \;
 
 # AVATAP HOST LIB (COCKLE-SPECIFIC AVATAP PLATFORM)
-$RMPATHCMD -R $MODULEDIR/host || true
+$RMPATHCMD -rf $MODULEDIR/host
+#$RMPATHCMD -R $MODULEDIR/host || true
 $CREATEPATHCMD $MODULEDIR/host
 $COPYPATHCMD avatap/python/host/__init__.py $MODULEDIR/host/
 $COPYPATHCMD avatap/python/host/cockle.py $MODULEDIR/host/
 
 # AVATAP REGIMES (e.g. INTEGRATION TEST)
-$RMPATHCMD -R $MODULEDIR/regimes || true
+$RMPATHCMD -rf $MODULEDIR/regimes
+#$RMPATHCMD -R $MODULEDIR/regimes || true
 $CREATEPATHCMD $MODULEDIR/regimes
 $COPYPATHCMD avatap/python/regimes/integration_test.py $MODULEDIR/regimes/
 
@@ -78,11 +81,12 @@ $COPYPATHCMD avatap/python/regimes/integration_test.py $MODULEDIR/regimes/
 # TRIGGER FREEZING OF MODULES INTO FIRMWARE IMAGE AND UPLOAD IT
 cd micropython/esp8266/
 set -e
-export PATH=/home/cefn/Documents/shrimping/git/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
+export PATH=/home/vagrant/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
+#export PATH=/home/cefn/Documents/shrimping/git/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 #$MAKECMD clean
 #$MAKECMD axtls
 $MAKECMD build/firmware-combined.bin
 #$MAKECMD PORT=/dev/ttyUSB0 FLASH_MODE=dio FLASH_SIZE=32m deploy
 #CH below invocation is faster
-$ESPTOOLCMD --port /dev/ttyUSB0 --baud 1500000 write_flash --flash_mode dio --flash_size=32m 0 build/firmware-combined.bin
+#$ESPTOOLCMD --port /dev/ttyUSB0 --baud 1500000 write_flash --flash_mode dio --flash_size=32m 0 build/firmware-combined.bin
 

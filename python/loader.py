@@ -2,8 +2,8 @@
 # garbage collecting between and reporting remaining memory
 from agnostic import report_import, report_collect
 
-storyUid = "arbeia"
-boxUid = "1"
+storyUid = 'arbeia'
+boxUid = '3'
 
 def loadDisplay():
     report_collect()
