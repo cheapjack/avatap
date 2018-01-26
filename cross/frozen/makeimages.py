@@ -38,7 +38,7 @@ for museumName,boxCount in boxCounts.items():
 		boxPath = os.path.join(gitFolder,"avatap/firmware", museumName, "{}{}.bin".format(imageName, boxName))
 		replaceall("boxUid.*=.*$", "boxUid = '{}'".format(boxName), loaderPath)
 		#os.remove(buildPath)
-		#call(["rm", buildPath])
+		call(["rm", buildPath])
 		call(["./export.sh"])
 		#os.copyfile(buildPath, boxPath)
 		call(["cp", buildPath, boxPath])
