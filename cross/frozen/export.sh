@@ -94,4 +94,5 @@ $MAKECMD build/firmware-combined.bin
 #CH below invocation is faster
 # Commented the below out, so that combined .bin image can be deployed locally.
 # $ESPTOOLCMD --port /dev/ttyUSB0 --baud 1500000 write_flash --flash_mode dio --flash_size=32m 0 build/firmware-combined.bin
-
+# Use below on a osx hosting vagrant image
+# esptool.py --port /dev/tty.SLAB_USBtoUART --baud 115200 write_flash --flash_mode dio --flash_size=32m 0 imageName[boxNo.].bin
