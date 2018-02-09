@@ -16,7 +16,7 @@ story = Story(
         "science":False,
         "archive":False,
         "readpoints":0,
-        "alexpoints":0,
+        "searchpoints":0,
         "hours":0,
     }
 )
@@ -24,9 +24,9 @@ agnostic.collect()
 
 with story:
 
-    infoBox =    Box( uid="1",   label="Box I",      description="Information Books")
-    localBox =   Box( uid="2",   label="Box II",     description="Local Interest")
-    wowBox = Box( uid="3",   label="Box III",     description="Writing on the Wall")
+    infoBox =    Box( uid="1",   label="Box I",      description="Fiction Section")
+    localBox =   Box( uid="2",   label="Box II",     description="Liverpool Archives")
+    pictonBox = Box( uid="3",   label="Box III",     description="Picton Reading Room")
     agnostic.collect()
 
     entranceBox = infoBox
@@ -52,18 +52,18 @@ with story:
             nextNodeUid =   "yardArrive",
                 #23456789012345678901234
             sequence = [
-                """You are in Toxteth
-                Library. You must
-                discover books and
-                collections unknown""",
+                """You are in Liverpool
+                Central Library. You
+                must discover books and
+                collections unknown!""",
                 """You must READ books
                 you don't know about
                 and explore the library""",
             ],
             missTemplate = """Your adventure is over.
-            you have {{sack.dockerspoints}}
+            You have {{sack.dockerspoints}}
             local knowledge.
-            You have {{sack.sciencepoints}} science
+            You have {{sack.searchpoints}} science
             points.
             Return to {{node.goalBox.label}}
             to respawn.""",
@@ -83,9 +83,9 @@ with story:
         time = incrementTime,
         #123456789012345678901234
         page =
-        """You are in the
-        Information and children
-        section.
+        """You are on the ground
+        floor a beautiful spiral
+        of knowledge above you.
         {% if sack.hours <= 4 %}It's early in the
         morning and some people
         are using computers.
@@ -107,8 +107,8 @@ with story:
         choices = {
             "localbooks":   """Find out about
             liverpool.""",
-            "exhibit":  """Read letters from
-            the past.""",
+            "exhibit":  """Read letters
+            from the past.""",
         },
     )
     agnostic.collect()
@@ -117,10 +117,10 @@ with story:
         uid =   "localbooks",
         time = incrementTime,
         sequence = [
-        """You are in the Local
-        Interest section. You
-        can see two different
-        books
+        #23456789012345678901234
+        """You are in the Search
+        Room. You can see two
+        different books
         """,
         ],
         goalBoxUid = localBox.uid,
@@ -131,11 +131,10 @@ with story:
     NodeFork(
         uid = "chooseBook",
         choices  = {
-            #23456789012345678901234
             "dockers" : """Dockers, photos by
             Dave Sinclair""",
-            "science"  : """science, god of war &
-            also peace""",
+            "science"  : """Science about
+            products""",
         },
     )
     agnostic.collect()
@@ -148,12 +147,12 @@ with story:
             assign = { "dockers":True },
             plus = { "dockerspoints":2 },
             ),
-        page ="""{% if node.change.triggered %}dockers protector of
-        horses!
-        May our mounts stay
-        strong steady & fertile.
-        Make an offering!
-        {% else %}dockers is with us already!
+        page ="""{% if node.change.triggered %}The history of
+        dockers is important
+        to Liverpool the
+        great city of docks
+        Read it!
+        {% else %}You read dockers already!
         {% endif %}
         """,
         goalBoxUid = infoBox.uid,
@@ -163,7 +162,7 @@ with story:
 
     ThroughPage(
         uid = "science",
-        goalBoxUid = wowBox.uid,
+        goalBoxUid = pictonBox.uid,
         time = incrementTime,
         change = SackChange(
             trigger = "sack.science == False",
@@ -171,12 +170,10 @@ with story:
         ),
         page =
         """{% if node.change.triggered %}science! MIME how
-                strong you are!
-                We need great warriors!
-        {% else %}You feel strong!
+                clever you are!
+                We need scientists!
+        {% else %}You feel clever!
                 science is with us already!
-                He also helps with the
-                harvest you know...
         {% endif %}
         """,
         nextNodeUid = "scienceoffers",
@@ -186,16 +183,16 @@ with story:
     NodeFork(
         uid =   "dockersoffers",
         choices = {
-            "dockerswine": "Offer some wine",
-            "dockersgrain": """Seek some ears
-            of grain"""
+            "dockerswine": "Discover economics",
+            "dockersgrain": """Discover work
+            today"""
         },
     )
     agnostic.collect()
 
     ThroughPage(
         uid =   "dockerswine",
-        goalBoxUid = wowBox.uid,
+        goalBoxUid = pictonBox.uid,
         change = SackChange(
             trigger = "sack.dockerspoints > 1",
             assign = { "dockers":False },
@@ -203,14 +200,14 @@ with story:
         ),
         page ="""{% if node.change.triggered %}
                     {% if node.change.completed %}
-                        You leave a cup of wine
-                        for her. Should she
-                        drink and ride?
+                        Economic policy changed
+                        Liverpool forever.
+                        For Good and Bad
                     {% else %}
                     You are out of favour!
                     {% endif %}
                 {% else %}
-                dockers is not satisfied.
+                dockers are not satisfied.
                 {% endif %}
         """,
         nextNodeUid = "yardArrive",
@@ -225,11 +222,11 @@ with story:
             plus = { "dockerspoints":10 },
         ),
         page =
-        """PRETEND to offer grain
-        from the local harvest
-        dockers is often depicted
-        with grain. She also
-        is a god of fertility
+        """PRETEND tourism
+        is a good alternative
+        to industry
+        and 3d printing
+        will help employment
         """,
         nextNodeUid = "yardArrive",
     )
@@ -238,9 +235,9 @@ with story:
     NodeFork(
         uid =   "scienceoffers",
         choices = {
-            "sciencewine": "Offer some wine",
-            "sciencegrain": """Seek some ears
-            of grain""",
+            "sciencewine": "Offer some IoT",
+            "sciencegrain": """Build some
+            cars""",
         },
     )
     agnostic.collect()
@@ -250,14 +247,12 @@ with story:
         goalBoxUid = localBox.uid,
         time = incrementTime,
         change = SackChange(
-            plus = { "sciencepoints":2 }
+            plus = { "searchpoints":2 }
         ),
         sequence = [
-        """LEAVE a cup of wine.
-        He also helps with
-        the harvest you know...""",
-        """...which helps us
-        make more wine!"""
+        """DO CODING using
+        IoT""",
+        """...with microbits"""
         ],
         nextNodeUid = "yardArrive",
     )
@@ -270,12 +265,12 @@ with story:
             trigger = "sack.science == True",
             assign = {"science":False},
         ),
-        page = """{% if node.change.triggered %}You offer grain from the
-        store. What is he
-        to do with this?
-        He's not a horse!
-        GALLOP away mortal!
-        {% else %}science is bored of grain
+        page = """{% if node.change.triggered %}You offer to make
+        more cars. Are you
+        serious?
+        Land Rover make
+        Liverpools Cars!
+        {% else %}science is bored of cars
         {% endif %}
         """,
         nextNodeUid = "yardArrive",
@@ -295,7 +290,7 @@ with story:
         uid =   "seaviewclear",
         time = incrementTime,
         page = """You can see the sea""",
-        goalBoxUid = wowBox.uid,
+        goalBoxUid = pictonBox.uid,
         nextNodeUid = "yardArrive",
     )
     agnostic.collect()
@@ -307,13 +302,13 @@ with story:
         sequence = [
             """You can see the sea
             On the horizon
-            you can see a sail!""",
-            """We must fight off the
-            invaders and prepare
-            to defend the coastal
-            outpost!""",
+            you can see a container""",
+            """We must fight off
+            supercontainerisation
+            to defend docks from
+            Peele Holdings""",
         ],
-        goalBoxUid = wowBox.uid,
+        goalBoxUid = pictonBox.uid,
         nextNodeUid = "bravery",
     )
     agnostic.collect()
@@ -322,9 +317,9 @@ with story:
         uid =   "bravery",
         choices = {
             "localbooks": """Make another visit to
-            the altars""",
-            "battle": """Defend the outpost!
-            Get a sword!""",
+            the search room""",
+            "battle": """Fight globalisation!
+            Get a laptop!""",
         },
     )
     agnostic.collect()
@@ -346,17 +341,16 @@ with story:
         change = SackChange(
             trigger =   "sack.archive == False",
             assign =    { "archive":True},
-            plus  =     { "sciencepoints":4 },
+            plus  =     { "searchpoints":4 },
         ),
         page = """{% if node.change.triggered %}You bravely hold back
-        the invaders! CHARGE
-        down the coastal path!
+        supercontainerisation
+        down the estuary!
         You kill the fleeing
-        celts & take a horse
-            {% else %}You HOLD back the hordes
-            best you can but are
-            driven back! the coastal
-            path may be over run!
+        Peele Holdings
+            {% else %}You HOLD back
+            globalisation but are
+            driven back!
             {% endif %}
         """,
         nextNodeUid = "yardArrive"
@@ -368,11 +362,11 @@ with story:
         time = incrementTime,
         sequence = [
             """You bravely HOLD back
-            the invaders charging
-            up the coastalpath
-            but are forced back!""",
+            supercontainerisation
+            for a while but
+            are forced back!""",
             """You RUN to the wall
-            and DIE! science help us!"""
+            and are UNEMPLOYED!"""
         ],
         goalBoxUid =    infoBox.uid,
         nextNodeUid =   "retirement",
@@ -423,7 +417,7 @@ with story:
             """,
             """Your adventure is over.
             dockers favours {{sack.dockerspoints}} horses
-            and science will make {{sack.sciencepoints}}
+            and science will make {{sack.searchpoints}}
             great cavalryman for
             the wall
             Return to {{node.goalBox.label}}
