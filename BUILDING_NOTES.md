@@ -76,4 +76,9 @@ make
 
  * Run `cross/frozen/makeimages.py` On first run the firmware build will verbosely throw unused variable errors on each img but then you'll see the template building etc. and after about 5 minutes you'll get 3-4 fresh new firmwares for respective boxes.
 
- * Now push the firmwares back up to the game branch or transfer the files from vagrant ready for using `esptool.py` to flash the avatap boxes.
+ * Now push the firmwares back up to the game branch or transfer the files from vagrant ready for using `esptool.py` to flash the avatap boxes
+
+eg
+```
+esptool.py --port /dev/tty.SLAB_USBtoUART --baud 115200 write_flash --flash_mode dio --flash_size=32m 0 hyperloop1.bin
+```
