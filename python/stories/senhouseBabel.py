@@ -183,7 +183,8 @@ with story:
     NodeFork(
         uid =   "dockersoffers",
         choices = {
-            "dockerswine": "Discover economics",
+            "dockerswine": """Read about
+            economics""",
             "dockersgrain": """Discover work
             today"""
         },
