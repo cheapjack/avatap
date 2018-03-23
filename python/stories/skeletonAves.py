@@ -59,6 +59,8 @@ with story:
             uid= "foyerIntro",
             time = incrementTime,
             #123456789012345678901234
+            goalBoxUid = groundBox.uid,
+            nextNodeUid = "firstOak",
             sequence = [
              """You have stumbled upon
             the first of 4 unusual
@@ -81,8 +83,6 @@ with story:
             in the library to
             begin your journey""",
             ],
-            goalBoxUid = groundBox.uid,
-            nextNodeUid = "firstOak",
             )
 
     ThroughSequence(
@@ -298,8 +298,8 @@ with story:
     ThroughPage(
             uid="LearSuccess",
             change = SackChange(
-                trigger = "sack.audubon == False",
-                assign = {"audubon": True},
+                trigger = "sack.lyricedLear == False",
+                assign = {"lyricedLear": True},
                 ),
             goalBoxUid = pictonBox.uid,
             nextNodeUid="completeCheck",
@@ -417,7 +417,6 @@ with story:
     ThroughPage(
             uid="moreBirds",
             goalBoxUid = oakBox.uid,
-            ###########23456789012345678901234
             page = """FIND Audubon's birds!
 		    {% if sack.birdpoints < 3 %}You are doing ok!
             You have {{ sack.birdpoints }} so far,

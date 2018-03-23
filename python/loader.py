@@ -2,7 +2,7 @@
 # garbage collecting between and reporting remaining memory
 from agnostic import report_import, report_collect
 
-storyUid = 'testAves'
+storyUid = 'skeletonAves'
 
 boxUid = '4'
 
