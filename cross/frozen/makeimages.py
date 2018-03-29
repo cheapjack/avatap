@@ -17,8 +17,10 @@ buildPath = os.path.join(gitFolder, "micropython/esp8266/build/firmware-combined
 imageName = "libraryloop"
 
 boxCounts = dict(
+	#senhouseLeeds=3,
 	skeletonAves=4,
-	#arbeia=3,
+	#singleAves=1,
+        #arbeia=3,
 	#corbridge=4,
 	#housesteads=4,
 	#segedunum=4,
