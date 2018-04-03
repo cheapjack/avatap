@@ -10,18 +10,15 @@ story = Story(
     version="0.1.0",
     startNodeUid="firstLanding",
     startSack={
-            "birdpoints": 0,
-            "poempoints":  0,
-            "lyricedLear": False,
+            "pages": 0,
+            "Leared": False,
             "audubon": False,
             "bonnet": False,
             "beard": False,
             "pussy": False,
-            "owl": False,
             "turkey": False,
+            "owl": False,
             "lark": False,
-            "hours": 0,
-            "complete": False,
             }
 )
 
@@ -32,67 +29,67 @@ with story:
     archiveBox = Box( uid="4", label="Vol IV", description="The Archives")
 
     entranceBox = groundBox
-    incrementTime = SackChange(
-            plus={ "hours":1 }
-            )
 
     # populate with passages
     ThroughPage(
-            change=SackChange(
-                reset=story.startSack
-                ),
             uid="firstLanding",
             goalBoxUid=entranceBox.uid,
             page=introText,
+            nextNodeUid="landing",
+            )
+
+    ConditionFork(
+            uid= "tinbergenCheck",
+           condition = "sack.audubon == True",
+            falseNodeUid = "adventureChoice",
+            trueNodeUid = "tinbergensGame",
+            )
+
+    ConditionFork(
+            uid= "completeCheck",
+            condition = "sack.Leared == True and sack.audubon == True",
+            falseNodeUid = "pictonSecond",
+            trueNodeUid = "endGame",
+            )
+
+    ThroughPage(
+            uid="landing",
+            goalBoxUid=entranceBox.uid,
+            change = SackChange(
+                reset=story.startSack
+            ),
+            page="""You have stumbled upon
+            the first of 4 unusual
+            volumes hidden in the
+            library...""",
             nextNodeUid="foyerIntro",
             )
 
 
-    ConditionFork(
-            uid= "completeCheck",
-            condition = "sack.lyricedLear == True and sack.audubon == True",
-            falseNodeUid = "foyerIntro",
-            trueNodeUid = "endGame",
-            )
-
     ThroughSequence(
             uid= "foyerIntro",
-            time = incrementTime,
             #123456789012345678901234
             goalBoxUid = groundBox.uid,
             nextNodeUid = "firstOak",
             sequence = [
-             """You have stumbled upon
-            the first of 4 unusual
-            volumes hidden in the
-            library...""",
             """You are on the ground
             floor beautiful levels
 		    of knowledge above you.
-		    {% if sack.hours < 4 %}It's early in the
-		    morning and some people
-		    are using computers.
-		    {% endif %}
-            {% if sack.hours > 4 and sack.hours <= 12 %}It's midday & time for
-            lunch{% endif %}
-            {% if sack.hours == 13 %}It's raining {% endif %}
-		    {% if sack.hours > 16 %}The library is closing!{% endif %}
             """,
-            """GO FIND the OAK ROOM
+            """Go FIND the Oak Room
             with the biggest book
             in the library to
-            begin your journey""",
+            continue your adventure!""",
             ],
             )
 
     ThroughSequence(
             uid= "firstOak",
-		    time = incrementTime,
 		    sequence = [
 		    #23456789012345678901234
             """In front of you in the
-            case is the "Wild Birds
-            of America" by
+            case is the infamous
+            "Birds of America" by
             John James Audubon a
             great naturalist, artist
             and hunter""",
@@ -100,8 +97,9 @@ with story:
             to your adventure! And
             it's part of why this
             library exists...""",
-            """GO to the Picton Room
-            QUIETLY to find out more""",
+            """GO to the Picton
+            Reading Room QUIETLY
+            to find out more...""",
             ],
             goalBoxUid = oakBox.uid,
             nextNodeUid = "pictonStart",
@@ -111,6 +109,7 @@ with story:
             uid="pictonStart",
             goalBoxUid=pictonBox.uid,
             sequence=[
+            # embellish and explain
             #23456789012345678901234
             """OK be quiet, like in
             the British Museum
@@ -118,11 +117,56 @@ with story:
             modelled on, people here
             can hear you across the
             other side of the room""",
+            """You are going to make
+            a slim volume for the
+            13th Earl of Derby,
+            his collection led to
+            this library being
+            built...""",
             """Do you want to take the
             path of the hunter or
             a lyrical journey of
             Liverpudlian patronage?""",
             ],
+            nextNodeUid="adventureChoice",
+            )
+
+    ThroughSequence(
+            uid="pictonSecond",
+            goalBoxUid=pictonBox.uid,
+            sequence=[
+            #23456789012345678901234
+            """Did you know that this
+            is the worlds first
+            library to be lit by
+            electricity?...""",
+            """You could inform the
+            Lord Stanley on progress
+            or hurry along with
+            your book...""",
+            ],
+            nextNodeUid="checkinChoice",
+            )
+
+    NodeFork(
+            uid = "checkinChoice",
+            page = "What do you want to do?",
+            choices = {
+                "Derby1": """Check in with
+                the Earl of Derby""",
+                "hurryUp": """Let's get
+                this book
+                finished!""",
+                },
+            )
+
+    ThroughPage(
+            uid="hurryUp",
+            goalBoxUid = groundBox.uid,
+            #23456789012345678901234
+            page="""
+            Let's finish this thing!
+            ...""",
             nextNodeUid="adventureChoice",
             )
 
@@ -137,24 +181,41 @@ with story:
                 },
             hideChoices = {
                 "Audubon": "sack.audubon==True",
-                "Lear": "sack.lyricedLear==True",
+                "Lear": "sack.Leared==True",
                 },
-)
+            )
 
     ThroughSequence(
             uid="Lear",
-            goalBoxUid = archiveBox.uid,
+            goalBoxUid = groundBox.uid,
+            #goalBoxUid = archiveBox.uid,
             nextNodeUid="poemChoice",
             #23456789012345678901234
             sequence=[
+            """Audubon's patron, the
+            13th Earl of Derby was
+            also the patron of the
+            poet and painter Edward
+            Lear...""",
+            """Lear was invited to
+            Knowsley Hall to paint
+            from Lord Stanley's
+            collection of birds &
+            animals...""",
+            """Unlike Audubon, he
+            would only draw from
+            real live birds...
+            you could say this
+            might be why he was a
+            poet and not a hunter..""",
             """Try to FIND 3 Lear
             poems in the library and
-            mark it down in the
+            write them in the
             INVENTORY in your
-            leaflet...""",
+            booklet...""",
             """RETURN here
-            floor once you FIND all
-            3 of his poems.""",
+            once you FIND all
+            of his poems.""",
             ],
             missTemplate = """This isn't
             {{node.goalBox.description}}!
@@ -168,9 +229,9 @@ with story:
             Where to look?
             """,
             choices = {
-                "bonnetGround": "Someone's Hat",
-                "oldManOak": "Beards",
-                "owlPicton": "Owls and cats",
+                "bonnetGround": "Archives",
+                "oldManOak": "Oak Room",
+                "owlPicton": "Reading Room",
                 },
             hideChoices = {
                 "bonnetGround": "sack.bonnet==True",
@@ -183,11 +244,12 @@ with story:
             uid="bonnetGround",
             change = SackChange(
                 trigger = "sack.bonnet == False",
-                plus = { "poempoints":1 },
+                plus = { "pages":1 },
                 assign = {"bonnet": True},
                 ),
-            goalBoxUid = groundBox.uid,
+            goalBoxUid = archiveBox.uid,
             #23456789012345678901234
+            #needs logic for saying '1 page'
             sequence = [
             """There was a Young Lady
             whose bonnet,
@@ -196,14 +258,11 @@ with story:
             """All the birds in the air
             Are welcome to sit on my
             bonnet!""",
-            """
-            {% if sack.bonnet == True %}
-                You now have {{ sack.poempoints }} poem!
-                Return to the archives!
-            {% else %}
-                You now have {{ sack.poempoints }} poems!
-                Keep looking!
-            {% endif %}
+            """You write it down in
+            your booklet ready for
+            your book...""",
+            """You now have {{ sack.pages }} pages
+            Carry on...
             """,
             ],
             missTemplate = """This isn't
@@ -217,7 +276,7 @@ with story:
             uid="oldManOak",
             change = SackChange(
                 trigger = "sack.beard == False",
-                plus = { "poempoints":1 },
+                plus = { "pages":1 },
                 assign = { "beard":True },
                 ),
             goalBoxUid = oakBox.uid,
@@ -231,6 +290,9 @@ with story:
             Four Larks and a Wren,
             Have all built their
             nests in my beard!""",
+            """You write it down in
+            your booklet ready for
+            your book...""",
             ],
             nextNodeUid="LearCheck",
             missTemplate = """This isn't
@@ -243,7 +305,7 @@ with story:
             uid="owlPicton",
             change = SackChange(
                 trigger = "sack.pussy == False",
-                plus = { "poempoints":1 },
+                plus = { "pages":1 },
                 assign = { "pussy":True },
                 ),
             goalBoxUid = pictonBox.uid,
@@ -257,8 +319,9 @@ with story:
             and plenty of money,...""",
             """Wrapped in a five pound
             note.""",
-            """You now have {{ sack.poempoints }} poems!
-            """,
+            """You write it down in
+            your booklet ready for
+            your book...""",
             ],
             nextNodeUid="LearCheck",
             missTemplate = """This isn't
@@ -277,19 +340,19 @@ with story:
 
     ThroughSequence(
             uid="morePoems",
-            goalBoxUid = archiveBox.uid,
+            goalBoxUid = groundBox.uid,
             nextNodeUid="poemChoice",
             sequence = [
             #23456789012345678901234
-            """You are looking for poems
-		    {% if sack.poempoints < 3 %}You are doing well!
-            You have {{ sack.poempoints }} so far,
+            """Your lyrical search
+            for content continues...
+		    You are doing well!
+            Another page for Lear.
+            {% if sack.pages < 2 %}You have {{ sack.pages }} page so far,
             keep looking!
-		    {% endif %}
-            {% if sack.poempoints > 1 %}Just one more
-            poem to find
-            {% endif %}
-            {% if sack.poempoints == 3 or sack.poempoints >= 3 %}Well Done!
+		    {% else %}
+            You have {{ sack.pages }} pages now!
+            Carry on!
             {% endif %}
             """
             ],
@@ -298,15 +361,20 @@ with story:
     ThroughPage(
             uid="LearSuccess",
             change = SackChange(
-                trigger = "sack.lyricedLear == False",
-                assign = {"lyricedLear": True},
+                trigger = "sack.Leared == False",
+                assign = {"Leared": True},
                 ),
+            # Add logic for publishing message
+            #May need changing to 2 oakBox
+            #23456789012345678901234
             goalBoxUid = pictonBox.uid,
             nextNodeUid="completeCheck",
-            page = """You have done it!
-            You have {{ sack.poempoints }} poems
-            enough for a slim volume!
-            Go get it published!
+            page = """Great rhymes! You
+            have {{ sack.pages }} pages toward your
+            slim volume! Go get it
+            published!
+            {% if sack.audubon == False %}Now I think you need to
+            do some twitching...{% endif %}
             """,
             )
 
@@ -316,6 +384,12 @@ with story:
             sequence=[
             #123456789012345678901234
             #elaborate
+            """Audubon hunted his birds
+            pinned them in place and
+            drew them life size in
+            the 'elephant' portfolio
+            size you see in the Oak
+            Room...""",
             """The pages magically
             turn to a different page
             every week so of course
@@ -337,10 +411,10 @@ with story:
             uid = "birdChoices",
             page = "Where could they be?",
             choices = {
-                "Turkey": """Thanksgiving""",
-                "Owl": """The Bird
-                who reads""",
-                "Lark": """Larkin about""",
+                "Turkey": """The Ground Floor""",
+                "Owl": """The Reading Room""",
+                "Lark": """Larkin about the
+                archives""",
                 },
             hideChoices = {
                 "Turkey": "sack.turkey==True",
@@ -354,7 +428,7 @@ with story:
             goalBoxUid = groundBox.uid,
             change = SackChange(
                 trigger = "sack.turkey == False",
-                plus = { "birdpoints":1 },
+                plus = { "pages":1 },
                 assign = { "turkey":True },
                 ),
             sequence=[
@@ -374,14 +448,14 @@ with story:
             goalBoxUid = pictonBox.uid,
             change = SackChange(
                 trigger = "sack.owl == False",
-                plus = { "birdpoints":1 },
+                plus = { "pages":1 },
                 assign = { "owl":True },
                 ),
             sequence=[
             #123456789012345678901234
             """In front of you is
             a snowy owl, Strix nectea""",
-             """You draw it in your
+            """You draw it in your
             notebook""",
             ],
             nextNodeUid="birdCheck",
@@ -392,7 +466,7 @@ with story:
             goalBoxUid = archiveBox.uid,
             change = SackChange(
                 trigger = "sack.lark == False",
-                plus = { "birdpoints":1 },
+                plus = { "pages":1 },
                 assign = { "lark":True },
                 ),
             sequence=[
@@ -418,14 +492,10 @@ with story:
             uid="moreBirds",
             goalBoxUid = oakBox.uid,
             page = """FIND Audubon's birds!
-		    {% if sack.birdpoints < 3 %}You are doing ok!
-            You have {{ sack.birdpoints }} so far,
+		    {% if sack.pages < 3 %}You are doing ok!
+            You have {{ sack.pages }} so far,
             keep looking!
 		    {% endif %}
-            {% if sack.birdpoints > 1 %}You have {{ sack.birdpoints }} hunt points!
-            Just one more
-            bird to find{% endif %}
-            {% if sack.birdpoints == 3 or sack.birdpoints >= 3 %}Well Done!{% endif %}
             """,
             nextNodeUid="birdChoices",
             )
@@ -438,21 +508,197 @@ with story:
                 ),
             goalBoxUid = pictonBox.uid,
             #23456789012345678901234
-            page = """You have done it!
-            You have {{ sack.birdpoints }} birdpoints.
-            Onwards to get a patron!
+            page = """Congratulations!
+            You have drawn {{ sack.pages }} pages
+            in your notebook.
+            Onwards with your book!
+            {% if sack.Leared == False %}Maybe some humerous
+            poems would be nice...{% endif %}
             """,
             nextNodeUid="completeCheck",
             )
 
+    ThroughSequence(
+            uid="Derby1",
+            goalBoxUid = archiveBox.uid,
+            change = SackChange(
+                plus = { "pages":1 },
+                ),
+            sequence=[
+                #123456789012345678901234
+            """An old man in victorian
+            clothes is sitting by the
+            microfiche machine... he
+            shakes his head...""",
+             """'Why this is like the
+            opposite of Audubon;
+            collecting knowledge in
+            tiny images!'...""",
+            """I could be patron to
+            thousands more books if
+            we had this in my day...""",
+            """I see you have the start
+            of something, maybe Lear
+            and Audubon together is
+            a nice idea...""",
+            """I'll write a preface
+            if you like! I've written
+            to Darwin you know...""",
+            """
+            {% if sack.audubon == True %}
+                That's fine work. They
+                are important specimens!
+                Audubon would be proud
+                of your tenacity...
+            {% else %}
+                Ah Lear, such a lover of
+                drawing living animals
+                at Knowsley Hall when he
+                wasnt reading rhymes
+                to the children!...
+            {% endif %}""",
+            """CARRY ON with the work
+            my friend, I'm going to
+            look up my descendants
+            on this machine...""",
+            ],
+            #change to tinbergenCheck
+            nextNodeUid="tinbergenCheck",
+            #nextNodeUid="adventureChoice",
+            )
+
+    ThroughSequence(
+            uid= "tinbergensGame",
+            goalBoxUid = pictonBox.uid,
+		    sequence = [
+		    #23456789012345678901234
+            """You see a man with
+            white hair and glasses
+            making a really strange
+            model of a bird""",
+            """It's not very realistic
+            not like Audubon's work!
+            The eyes are huge and
+            its brightly coloured
+            like a cartoon image...""",
+            """You ask him what he's
+            doing...it looks wrong!
+            'My name's Niko
+            Tinbergen and this is
+            some superstimuli...""",
+            """I'm an ornithologist
+            I suppose like Audubon,
+            but more like Edward
+            Lear; I only observe
+            birds in their natural
+            context...""",
+            """I've done this on
+            Walney island & I think
+            this exagerated bird
+            will attract birds more
+            than a realistic one...""",
+            """Maybe you could use
+            this for something?""",
+            ],
+            nextNodeUid = "stimuliChoice",
+            )
+
+    NodeFork(
+            uid = "stimuliChoice",
+            page = """Do you want to try
+            superstimuli?""",
+            choices = {
+                "superStimuli": """Ok I'll try, maybe
+                animals are quite
+                complicated""",
+                "noThanks": """No thanks I'm
+                busy collecting""",
+                },
+            )
+
+    ThroughSequence(
+            uid="superStimuli",
+            goalBoxUid = oakBox.uid,
+            change = SackChange(
+                plus = { "pages":1 },
+                ),
+            sequence=[
+		    #23456789012345678901234
+            """You take the odd
+            bird head and place it
+            on the floor...""",
+            """after a while you hear
+            fluttering sound and a
+            gull approaches the head
+            and keeps perfectly still
+            striking a pose!...""",
+            """You draw it in your
+            notebook""",
+            """A long haired man
+            appears next to you...
+            he looks like Audubon!
+            'Whats this? a lesser
+            black-backed Gull,
+            Larus fuscus...""",
+            """All the way from
+            Walney Island let me
+            get my gun!'...""",
+            """But the gull is
+            more complex than 19th
+            century science assumes,
+            out of context, it flys
+            through the skylight""",
+            """This will make an
+            interesting extra page
+            for your book but
+            no kill for Audubon!
+            """,
+            ],
+            nextNodeUid="extraBird",
+            )
+
+    ThroughPage(
+            uid="extraBird",
+            goalBoxUid = pictonBox.uid,
+            #23456789012345678901234
+            page="""
+            You hear a shot in the
+            distance and a shout
+            Audubon must have lost
+            his extra bird!""",
+            nextNodeUid="adventureChoice",
+            )
+
+
+    ThroughPage(
+            uid="noThanks",
+            goalBoxUid = groundBox.uid,
+            #23456789012345678901234
+            page="""
+            No thanks that doesn't
+            seem right. Birds are
+            simple mechanisms...
+            I'm going to carry on
+            19th century style...""",
+            nextNodeUid="adventureChoice",
+            )
+
     ThroughPage(
             uid="endGame",
-            goalBoxUid = pictonBox.uid,
-            page="""Game Over!
-            You found {{ sack.birdpoints }} birds and
-            {{ sack.poempoints }} poems for your book!
-            Go to the ground floor
-            to respawn""",
+            goalBoxUid = oakBox.uid,
+            page="""
+            Game Over! You made {{ sack.pages }}
+            pages for publication!
+            Lord Derby's feedback..
+            {% if sack.pages == 7 %}'A Well written preface!'
+            The glory of science!
+            Go to Vol I to respawn{% endif %}
+            {% if sack.pages == 8 %}'Amazing ethology page!
+            Animals know things!'
+            Go to Vol I to respawn{% endif %}
+            {% if sack.pages < 7 %}'A modest collection.
+            Better luck next time'
+            Go to Vol I to respawn{% endif %}
+            """,
             nextNodeUid="firstLanding",
             )
-# Bonus"""Can you FIND the only book in here that looks back at you and RETURN...""",

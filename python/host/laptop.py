@@ -19,8 +19,8 @@ from host import Host
 
 story = loader.loadStory(loader.storyUid)
 
-#delayActive = True
-delayActive = False
+delayActive = True
+#delayActive = False
 
 def hostDelay(delay):
     if delayActive:
@@ -34,7 +34,7 @@ def randomCardUid():
     return urandom(6)
 
 defaultNumCards = 4
-defaultDelay = 2.0
+defaultDelay = 1.0
 
 pollDelay = 0.01
 

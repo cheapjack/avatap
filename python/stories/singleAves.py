@@ -24,9 +24,6 @@ with story:
 
     # populate with passages
     ThroughPage(
-            change=SackChange(
-                reset=story.startSack
-                ),
             uid="firstLanding",
             goalBoxUid=entranceBox.uid,
             page=introText,
@@ -36,6 +33,9 @@ with story:
 
     ThroughSequence(
             uid= "foyerIntro",
+            change=SackChange(
+                reset=story.startSack
+                ),
             time = incrementTime,
             goalBoxUid = groundBox.uid,
             nextNodeUid = "firstLanding",

@@ -13,14 +13,15 @@ gitFolder = os.path.realpath("../../../")
 loaderPath = os.path.join(gitFolder, "avatap/python/loader.py")
 buildPath = os.path.join(gitFolder, "micropython/esp8266/build/firmware-combined.bin")
 
-imageName = "hyperloop"
+imageName = "libraryupdate"
 
 boxCounts = dict(
-	#arbeia=3,
+    skeletonAves=4,
+    #arbeia=3,
 	#corbridge=4,
 	#housesteads=4,
 	#segedunum=4,
-	senhouseBabel=3,
+	#senhouseBabel=3,
 	#TullieHouse=4,
 )
 

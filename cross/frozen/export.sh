@@ -20,9 +20,6 @@ ESPTOOLCMD="$ECHO esptool.py"
 cd $GITDIR
 
 # descend into avatap/python to cache templates, generate QString declarations then return
-# If doing this in the VM and populating the avatap folder from the 
-# new git branch for our game
-# we'll have to remove avatap/python/templates/.gitignore so that after emulation and testing locally not in the building VM  we've actually got the templates
 cd avatap/python
 # might have to enclose {} with single quotes accorging to the man page like this '{}'
 find templates -type f -name 't_*.py' -exec $RMPATHCMD {} \;
